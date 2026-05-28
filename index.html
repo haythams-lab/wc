@@ -1,0 +1,278 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body,html{background:var(--color-background-tertiary)}
+.app{width:100%;font-family:var(--font-sans);background:var(--color-background-tertiary);min-height:100vh;display:flex;flex-direction:column}
+.hero{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:16px 16px 12px}
+.hero-label{font-size:11px;font-weight:500;color:var(--color-text-success);letter-spacing:0.08em;text-transform:uppercase}
+.hero-title{font-size:22px;font-weight:500;color:var(--color-text-primary);margin-top:2px}
+.hero-sub{font-size:12px;color:var(--color-text-tertiary);margin-top:2px}
+.cd-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cd-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;text-align:center}
+.cd-label{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.05em}
+.cd-val{font-size:22px;font-weight:500;color:var(--color-text-primary);line-height:1.1}
+.cd-sub{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px 16px 0;background:var(--color-background-primary)}
+.stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 6px;text-align:center}
+.stat-icon{font-size:14px;margin-bottom:2px}
+.stat-num{font-size:18px;font-weight:500;line-height:1}
+.stat-lbl{font-size:9px;color:var(--color-text-tertiary);margin-top:2px}
+.stat-watch .stat-num{color:var(--color-text-success)}
+.stat-partial .stat-num{color:var(--color-text-info)}
+.stat-canada .stat-num{color:var(--color-text-warning)}
+.stat-miss .stat-num{color:var(--color-text-secondary)}
+.tabs-wrap{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:10px 16px 10px}
+.tab-row{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.tab-row::-webkit-scrollbar{display:none}
+.stab{font-size:12px;font-weight:500;padding:6px 14px;border-radius:99px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;white-space:nowrap;flex-shrink:0}
+.stab.active{background:var(--color-background-success);color:var(--color-text-success);border-color:transparent}
+.filter-row{display:flex;gap:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:10px 16px 0;background:var(--color-background-primary)}
+.filter-row::-webkit-scrollbar{display:none}
+.fb{font-size:11px;font-weight:500;padding:4px 12px;border-radius:99px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;white-space:nowrap;flex-shrink:0}
+.fb.active.all{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:transparent}
+.fb.active.watch{background:var(--color-background-success);color:var(--color-text-success);border-color:transparent}
+.fb.active.partial{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+.fb.active.canada{background:var(--color-background-warning);color:var(--color-text-warning);border-color:transparent}
+.fb.active.miss{background:var(--color-background-secondary);color:var(--color-text-secondary);border-color:transparent}
+.games-area{flex:1;padding:10px 16px 80px}
+.day-block{margin-bottom:8px;background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden}
+.day-header{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;user-select:none}
+.day-text{font-size:11px;font-weight:500;color:var(--color-text-secondary);letter-spacing:0.05em;text-transform:uppercase;flex:1}
+.wk-badge{font-size:10px;background:var(--color-background-success);color:var(--color-text-success);padding:2px 8px;border-radius:99px;font-weight:500}
+.day-count{font-size:11px;color:var(--color-text-tertiary)}
+.day-chevron{font-size:16px;color:var(--color-text-tertiary);transition:transform 0.2s}
+.day-block.open .day-chevron{transform:rotate(180deg)}
+.day-body{display:none;border-top:0.5px solid var(--color-border-tertiary)}
+.day-block.open .day-body{display:block}
+.game-card{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.game-card:last-child{border-bottom:none}
+.game-card.miss{opacity:0.45}
+.si{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.si-watch{background:var(--color-background-success);color:var(--color-text-success)}
+.si-partial{background:var(--color-background-info);color:var(--color-text-info)}
+.si-canada{background:var(--color-background-warning);color:var(--color-text-warning)}
+.si-miss{background:var(--color-background-secondary);color:var(--color-text-tertiary)}
+.g-info{flex:1;min-width:0}
+.g-match{font-size:13px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-note{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.g-time{font-size:12px;color:var(--color-text-tertiary);white-space:nowrap}
+.empty{text-align:center;color:var(--color-text-tertiary);font-size:13px;padding:3rem 0}
+</style>
+
+<h2 class="sr-only">FIFA World Cup 2026 personal schedule for Lacombe, Alberta — Mountain Time</h2>
+<div class="app">
+  <div class="hero">
+    <div class="hero-label">FIFA World Cup 2026</div>
+    <div class="hero-title">My schedule</div>
+    <div class="hero-sub">Lacombe, AB — Mountain Time</div>
+    <div class="cd-row">
+      <div class="cd-card"><div class="cd-label">Days left</div><div class="cd-val" id="ddays">--</div><div class="cd-sub">to kick off</div></div>
+      <div class="cd-card"><div class="cd-label">Tournament</div><div class="cd-val">39</div><div class="cd-sub">days total</div></div>
+      <div class="cd-card"><div class="cd-label">Matches</div><div class="cd-val">104</div><div class="cd-sub">total games</div></div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card stat-watch"><div class="stat-icon"><i class="ti ti-eye" aria-hidden="true"></i></div><div class="stat-num" id="s-watch">0</div><div class="stat-lbl">Watch</div></div>
+    <div class="stat-card stat-partial"><div class="stat-icon"><i class="ti ti-clock" aria-hidden="true"></i></div><div class="stat-num" id="s-partial">0</div><div class="stat-lbl">2nd half</div></div>
+    <div class="stat-card stat-canada"><div class="stat-icon"><i class="ti ti-map-pin" aria-hidden="true"></i></div><div class="stat-num" id="s-canada">3</div><div class="stat-lbl">Canada</div></div>
+    <div class="stat-card stat-miss"><div class="stat-icon"><i class="ti ti-briefcase" aria-hidden="true"></i></div><div class="stat-num" id="s-miss">0</div><div class="stat-lbl">Work hrs</div></div>
+  </div>
+
+  <div class="tabs-wrap">
+    <div class="tab-row" id="stage-tabs">
+      <button class="stab active" data-stage="all">All</button>
+      <button class="stab" data-stage="group">Group</button>
+      <button class="stab" data-stage="r32">Round of 32</button>
+      <button class="stab" data-stage="r16">Round of 16</button>
+      <button class="stab" data-stage="qf">Quarters</button>
+      <button class="stab" data-stage="sf">Semis</button>
+      <button class="stab" data-stage="final">Final</button>
+    </div>
+    <div class="filter-row" id="filters">
+      <button class="fb active all" data-filter="all">All games</button>
+      <button class="fb watch" data-filter="watch">Watch</button>
+      <button class="fb partial" data-filter="partial">2nd half</button>
+      <button class="fb canada" data-filter="canada">Canada</button>
+      <button class="fb miss" data-filter="miss">Work hours</button>
+    </div>
+  </div>
+
+  <div class="games-area" id="games-list"></div>
+</div>
+
+<script>
+const games=[
+  {stage:"group",day:"Thu Jun 11",weekend:false,status:"miss",time:"1:00pm",match:"Mexico vs South Africa"},
+  {stage:"group",day:"Thu Jun 11",weekend:false,status:"watch",time:"8:00pm",match:"South Korea vs Czech Republic"},
+  {stage:"group",day:"Fri Jun 12",weekend:false,status:"canada",time:"1:00pm",match:"Canada vs Bosnia & Herz.",note:"Free on CTV"},
+  {stage:"group",day:"Fri Jun 12",weekend:false,status:"watch",time:"7:00pm",match:"USA vs Paraguay"},
+  {stage:"group",day:"Sat Jun 13",weekend:true,status:"watch",time:"1:00pm",match:"Qatar vs Switzerland"},
+  {stage:"group",day:"Sat Jun 13",weekend:true,status:"watch",time:"4:00pm",match:"Brazil vs Morocco"},
+  {stage:"group",day:"Sat Jun 13",weekend:true,status:"watch",time:"7:00pm",match:"Haiti vs Scotland"},
+  {stage:"group",day:"Sat Jun 13",weekend:true,status:"watch",time:"10:00pm",match:"Australia vs Türkiye"},
+  {stage:"group",day:"Sun Jun 14",weekend:true,status:"watch",time:"11:00am",match:"Germany vs Curaçao"},
+  {stage:"group",day:"Sun Jun 14",weekend:true,status:"watch",time:"2:00pm",match:"Netherlands vs Japan"},
+  {stage:"group",day:"Sun Jun 14",weekend:true,status:"watch",time:"5:00pm",match:"Ivory Coast vs Ecuador"},
+  {stage:"group",day:"Sun Jun 14",weekend:true,status:"watch",time:"8:00pm",match:"Sweden vs Tunisia"},
+  {stage:"group",day:"Mon Jun 15",weekend:false,status:"miss",time:"10:00am",match:"Spain vs Cape Verde"},
+  {stage:"group",day:"Mon Jun 15",weekend:false,status:"miss",time:"1:00pm",match:"Belgium vs Egypt"},
+  {stage:"group",day:"Mon Jun 15",weekend:false,status:"partial",time:"4:00pm",match:"Saudi Arabia vs Uruguay",note:"Catch 2nd half from 5pm"},
+  {stage:"group",day:"Mon Jun 15",weekend:false,status:"watch",time:"7:00pm",match:"Iran vs New Zealand"},
+  {stage:"group",day:"Tue Jun 16",weekend:false,status:"miss",time:"1:00pm",match:"France vs Senegal"},
+  {stage:"group",day:"Tue Jun 16",weekend:false,status:"partial",time:"4:00pm",match:"Iraq vs Norway",note:"Catch 2nd half from 5pm"},
+  {stage:"group",day:"Tue Jun 16",weekend:false,status:"watch",time:"7:00pm",match:"Argentina vs Algeria"},
+  {stage:"group",day:"Tue Jun 16",weekend:false,status:"watch",time:"10:00pm",match:"Austria vs Jordan"},
+  {stage:"group",day:"Wed Jun 17",weekend:false,status:"miss",time:"11:00am",match:"Portugal vs DR Congo"},
+  {stage:"group",day:"Wed Jun 17",weekend:false,status:"partial",time:"2:00pm",match:"England vs Croatia",note:"Catch last ~30 min"},
+  {stage:"group",day:"Wed Jun 17",weekend:false,status:"watch",time:"5:00pm",match:"Ghana vs Panama"},
+  {stage:"group",day:"Wed Jun 17",weekend:false,status:"watch",time:"8:00pm",match:"Uzbekistan vs Colombia"},
+  {stage:"group",day:"Thu Jun 18",weekend:false,status:"miss",time:"1:00pm",match:"Switzerland vs Bosnia"},
+  {stage:"group",day:"Thu Jun 18",weekend:false,status:"canada",time:"4:00pm",match:"Canada vs Qatar",note:"Catch 2nd half — free on CTV"},
+  {stage:"group",day:"Fri Jun 19",weekend:false,status:"miss",time:"1:00pm",match:"USA vs Australia"},
+  {stage:"group",day:"Fri Jun 19",weekend:false,status:"partial",time:"4:00pm",match:"Scotland vs Morocco",note:"Catch 2nd half"},
+  {stage:"group",day:"Fri Jun 19",weekend:false,status:"partial",time:"4:00pm",match:"Brazil vs Haiti",note:"Catch 2nd half"},
+  {stage:"group",day:"Fri Jun 19",weekend:false,status:"watch",time:"7:00pm",match:"Egypt vs Iran"},
+  {stage:"group",day:"Fri Jun 19",weekend:false,status:"watch",time:"7:00pm",match:"New Zealand vs Belgium"},
+  {stage:"group",day:"Fri Jun 19",weekend:false,status:"watch",time:"10:00pm",match:"Türkiye vs Paraguay"},
+  {stage:"group",day:"Sat Jun 20",weekend:true,status:"watch",time:"11:00am",match:"Japan vs Tunisia"},
+  {stage:"group",day:"Sat Jun 20",weekend:true,status:"watch",time:"2:00pm",match:"Netherlands vs Sweden"},
+  {stage:"group",day:"Sat Jun 20",weekend:true,status:"watch",time:"2:00pm",match:"Ivory Coast vs Germany"},
+  {stage:"group",day:"Sat Jun 20",weekend:true,status:"watch",time:"5:00pm",match:"Ecuador vs Curaçao"},
+  {stage:"group",day:"Sun Jun 21",weekend:true,status:"watch",time:"10:00am",match:"Spain vs Saudi Arabia"},
+  {stage:"group",day:"Sun Jun 21",weekend:true,status:"watch",time:"1:00pm",match:"Cape Verde vs Uruguay"},
+  {stage:"group",day:"Sun Jun 21",weekend:true,status:"watch",time:"1:00pm",match:"Senegal vs Iraq"},
+  {stage:"group",day:"Sun Jun 21",weekend:true,status:"watch",time:"4:00pm",match:"Norway vs Playoff winner"},
+  {stage:"group",day:"Mon Jun 22",weekend:false,status:"miss",time:"11:00am",match:"Argentina vs Austria"},
+  {stage:"group",day:"Mon Jun 22",weekend:false,status:"miss",time:"2:00pm",match:"Algeria vs Jordan"},
+  {stage:"group",day:"Mon Jun 22",weekend:false,status:"miss",time:"2:00pm",match:"DR Congo vs Uzbekistan"},
+  {stage:"group",day:"Mon Jun 22",weekend:false,status:"watch",time:"5:00pm",match:"Colombia vs Playoff winner"},
+  {stage:"group",day:"Mon Jun 22",weekend:false,status:"watch",time:"5:00pm",match:"Croatia vs Panama"},
+  {stage:"group",day:"Mon Jun 22",weekend:false,status:"watch",time:"7:00pm",match:"Ghana vs England"},
+  {stage:"group",day:"Tue Jun 23",weekend:false,status:"miss",time:"11:00am",match:"Portugal vs Uzbekistan"},
+  {stage:"group",day:"Tue Jun 23",weekend:false,status:"miss",time:"11:00am",match:"DR Congo vs Colombia"},
+  {stage:"group",day:"Tue Jun 23",weekend:false,status:"miss",time:"2:00pm",match:"South Korea vs South Africa"},
+  {stage:"group",day:"Tue Jun 23",weekend:false,status:"miss",time:"2:00pm",match:"Mexico vs Czech Republic"},
+  {stage:"group",day:"Tue Jun 23",weekend:false,status:"watch",time:"5:00pm",match:"England vs Ghana"},
+  {stage:"group",day:"Tue Jun 23",weekend:false,status:"watch",time:"5:00pm",match:"Croatia vs Panama"},
+  {stage:"group",day:"Wed Jun 24",weekend:false,status:"canada",time:"1:00pm",match:"Canada vs Switzerland",note:"Free on CTV"},
+  {stage:"group",day:"Wed Jun 24",weekend:false,status:"miss",time:"1:00pm",match:"Bosnia vs Qatar"},
+  {stage:"group",day:"Wed Jun 24",weekend:false,status:"partial",time:"4:00pm",match:"Scotland vs Brazil",note:"Catch 2nd half"},
+  {stage:"group",day:"Wed Jun 24",weekend:false,status:"watch",time:"4:00pm",match:"Morocco vs Haiti"},
+  {stage:"group",day:"Thu Jun 25",weekend:false,status:"miss",time:"1:00pm",match:"Japan vs Sweden"},
+  {stage:"group",day:"Thu Jun 25",weekend:false,status:"miss",time:"1:00pm",match:"Tunisia vs Netherlands"},
+  {stage:"group",day:"Thu Jun 25",weekend:false,status:"watch",time:"8:00pm",match:"Türkiye vs USA"},
+  {stage:"group",day:"Thu Jun 25",weekend:false,status:"watch",time:"8:00pm",match:"Paraguay vs Australia"},
+  {stage:"group",day:"Fri Jun 26",weekend:false,status:"miss",time:"1:00pm",match:"Norway vs France"},
+  {stage:"group",day:"Fri Jun 26",weekend:false,status:"miss",time:"1:00pm",match:"Senegal vs Iraq"},
+  {stage:"group",day:"Fri Jun 26",weekend:false,status:"watch",time:"6:00pm",match:"Spain vs Uruguay"},
+  {stage:"group",day:"Fri Jun 26",weekend:false,status:"watch",time:"9:00pm",match:"Egypt vs Iran"},
+  {stage:"group",day:"Sat Jun 27",weekend:true,status:"watch",time:"all day",match:"Final group matchday"},
+  {stage:"group",day:"Sat Jun 27",weekend:true,status:"watch",time:"3:00pm",match:"England vs Panama"},
+  {stage:"group",day:"Sat Jun 27",weekend:true,status:"watch",time:"5:30pm",match:"Colombia vs Portugal"},
+  {stage:"group",day:"Sat Jun 27",weekend:true,status:"watch",time:"8:00pm",match:"Algeria vs Argentina"},
+  {stage:"r32",day:"Sun Jun 28",weekend:true,status:"watch",time:"11:00am",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Sun Jun 28",weekend:true,status:"watch",time:"1:00pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Sun Jun 28",weekend:true,status:"watch",time:"2:30pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Sun Jun 28",weekend:true,status:"watch",time:"7:00pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Mon Jun 29",weekend:false,status:"miss",time:"11:00am",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Mon Jun 29",weekend:false,status:"partial",time:"2:30pm",match:"R32 — TBD vs TBD",note:"Catch last ~30 min"},
+  {stage:"r32",day:"Mon Jun 29",weekend:false,status:"watch",time:"3:00pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Mon Jun 29",weekend:false,status:"watch",time:"7:00pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Tue Jul 1",weekend:false,status:"miss",time:"10:00am",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Tue Jul 1",weekend:false,status:"miss",time:"1:00pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Tue Jul 1",weekend:false,status:"watch",time:"5:00pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Tue Jul 1",weekend:false,status:"watch",time:"7:30pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Wed Jul 2",weekend:false,status:"miss",time:"10:00am",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Wed Jul 2",weekend:false,status:"miss",time:"1:00pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Wed Jul 2",weekend:false,status:"watch",time:"5:00pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Wed Jul 2",weekend:false,status:"watch",time:"7:30pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Thu Jul 3",weekend:false,status:"miss",time:"10:00am",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Thu Jul 3",weekend:false,status:"miss",time:"1:00pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Thu Jul 3",weekend:false,status:"watch",time:"5:00pm",match:"R32 — TBD vs TBD"},
+  {stage:"r32",day:"Thu Jul 3",weekend:false,status:"watch",time:"7:30pm",match:"R32 — TBD vs TBD"},
+  {stage:"r16",day:"Fri Jul 4",weekend:false,status:"miss",time:"10:00am",match:"R16 — TBD vs TBD"},
+  {stage:"r16",day:"Fri Jul 4",weekend:false,status:"miss",time:"2:00pm",match:"R16 — TBD vs TBD"},
+  {stage:"r16",day:"Sat Jul 5",weekend:true,status:"watch",time:"11:00am",match:"R16 — TBD vs TBD"},
+  {stage:"r16",day:"Sat Jul 5",weekend:true,status:"watch",time:"7:00pm",match:"R16 — TBD vs TBD (Mexico City)"},
+  {stage:"r16",day:"Sun Jul 6",weekend:true,status:"watch",time:"1:00pm",match:"R16 — TBD vs TBD (Dallas)"},
+  {stage:"r16",day:"Sun Jul 6",weekend:true,status:"watch",time:"6:00pm",match:"R16 — TBD vs TBD (Seattle)"},
+  {stage:"r16",day:"Mon Jul 7",weekend:false,status:"miss",time:"10:00am",match:"R16 — TBD vs TBD (Atlanta)"},
+  {stage:"r16",day:"Mon Jul 7",weekend:false,status:"miss",time:"2:00pm",match:"R16 — TBD vs TBD (Vancouver)"},
+  {stage:"qf",day:"Thu Jul 9",weekend:false,status:"miss",time:"2:00pm",match:"QF1 — TBD vs TBD (Boston)"},
+  {stage:"qf",day:"Fri Jul 10",weekend:false,status:"miss",time:"1:00pm",match:"QF2 — TBD vs TBD (Los Angeles)"},
+  {stage:"qf",day:"Sat Jul 11",weekend:true,status:"watch",time:"3:00pm",match:"QF3 — TBD vs TBD (Miami)"},
+  {stage:"qf",day:"Sat Jul 11",weekend:true,status:"watch",time:"7:00pm",match:"QF4 — TBD vs TBD (Kansas City)"},
+  {stage:"sf",day:"Tue Jul 14",weekend:false,status:"miss",time:"1:00pm",match:"SF1 — TBD vs TBD (Dallas)"},
+  {stage:"sf",day:"Wed Jul 15",weekend:false,status:"miss",time:"1:00pm",match:"SF2 — TBD vs TBD (Atlanta)"},
+  {stage:"final",day:"Sat Jul 18",weekend:true,status:"watch",time:"3:00pm",match:"Third place match — Miami"},
+  {stage:"final",day:"Sun Jul 19",weekend:true,status:"watch",time:"1:00pm",match:"World Cup Final — New Jersey",note:"Enjoy every minute"},
+];
+
+const iconMap={watch:"ti-eye",partial:"ti-clock",canada:"ti-map-pin",miss:"ti-briefcase"};
+const siClass={watch:"si-watch",partial:"si-partial",canada:"si-canada",miss:"si-miss"};
+let aF="all",aS="all";
+
+function daysUntil(){
+  const diff=Math.ceil((new Date("2026-06-11")-new Date())/(864e5));
+  document.getElementById("ddays").textContent=diff>0?diff:"Live!";
+}
+
+function render(){
+  const scope=games.filter(g=>aS==="all"||g.stage===aS);
+  const filtered=scope.filter(g=>aF==="all"||g.status===aF);
+  document.getElementById("s-watch").textContent=scope.filter(g=>g.status==="watch").length;
+  document.getElementById("s-partial").textContent=scope.filter(g=>g.status==="partial").length;
+  document.getElementById("s-miss").textContent=scope.filter(g=>g.status==="miss").length;
+
+  const days=[...new Set(filtered.map(g=>g.day))];
+  const container=document.getElementById("games-list");
+  if(!filtered.length){container.innerHTML='<div class="empty">No games match.</div>';return;}
+
+  const weekendDays=days.filter(d=>filtered.find(g=>g.day===d&&g.weekend));
+  const defaultOpen=weekendDays.length?weekendDays:[days[0]];
+
+  container.innerHTML=days.map(day=>{
+    const dg=filtered.filter(g=>g.day===day);
+    const isW=dg[0].weekend;
+    const open=defaultOpen.includes(day);
+    return`<div class="day-block${open?' open':''}" data-day="${day}">
+      <div class="day-header">
+        <span class="day-text">${day}</span>
+        ${isW?'<span class="wk-badge">Weekend</span>':''}
+        <span class="day-count">${dg.length} game${dg.length>1?'s':''}</span>
+        <i class="ti ti-chevron-down day-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="day-body">${dg.map(g=>`
+        <div class="game-card ${g.status}">
+          <div class="si ${siClass[g.status]}"><i class="ti ${iconMap[g.status]}" aria-hidden="true"></i></div>
+          <div class="g-info">
+            <div class="g-match">${g.match}</div>
+            ${g.note?`<div class="g-note">${g.note}</div>`:''}
+          </div>
+          <div class="g-time">${g.time}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  container.querySelectorAll(".day-header").forEach(h=>{
+    h.addEventListener("click",()=>h.closest(".day-block").classList.toggle("open"));
+  });
+}
+
+document.getElementById("stage-tabs").addEventListener("click",e=>{
+  const b=e.target.closest(".stab");if(!b)return;
+  aS=b.dataset.stage;
+  document.querySelectorAll(".stab").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");render();
+});
+document.getElementById("filters").addEventListener("click",e=>{
+  const b=e.target.closest(".fb");if(!b)return;
+  aF=b.dataset.filter;
+  document.querySelectorAll(".fb").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");render();
+});
+
+daysUntil();render();
+</script>
