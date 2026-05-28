@@ -1,106 +1,331 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>WC 2026 — My Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body,html{background:var(--color-background-tertiary)}
-.app{width:100%;font-family:var(--font-sans);background:var(--color-background-tertiary);min-height:100vh;display:flex;flex-direction:column}
-.hero{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:16px 16px 12px}
-.hero-label{font-size:11px;font-weight:500;color:var(--color-text-success);letter-spacing:0.08em;text-transform:uppercase}
-.hero-title{font-size:22px;font-weight:500;color:var(--color-text-primary);margin-top:2px}
-.hero-sub{font-size:12px;color:var(--color-text-tertiary);margin-top:2px}
-.cd-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-.cd-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;text-align:center}
-.cd-label{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.05em}
-.cd-val{font-size:22px;font-weight:500;color:var(--color-text-primary);line-height:1.1}
-.cd-sub{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px 16px 0;background:var(--color-background-primary)}
-.stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 6px;text-align:center}
-.stat-icon{font-size:14px;margin-bottom:2px}
-.stat-num{font-size:18px;font-weight:500;line-height:1}
-.stat-lbl{font-size:9px;color:var(--color-text-tertiary);margin-top:2px}
-.stat-watch .stat-num{color:var(--color-text-success)}
-.stat-partial .stat-num{color:var(--color-text-info)}
-.stat-canada .stat-num{color:var(--color-text-warning)}
-.stat-miss .stat-num{color:var(--color-text-secondary)}
-.tabs-wrap{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:10px 16px 10px}
-.tab-row{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
-.tab-row::-webkit-scrollbar{display:none}
-.stab{font-size:12px;font-weight:500;padding:6px 14px;border-radius:99px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;white-space:nowrap;flex-shrink:0}
-.stab.active{background:var(--color-background-success);color:var(--color-text-success);border-color:transparent}
-.filter-row{display:flex;gap:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:10px 16px 0;background:var(--color-background-primary)}
-.filter-row::-webkit-scrollbar{display:none}
-.fb{font-size:11px;font-weight:500;padding:4px 12px;border-radius:99px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;white-space:nowrap;flex-shrink:0}
-.fb.active.all{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:transparent}
-.fb.active.watch{background:var(--color-background-success);color:var(--color-text-success);border-color:transparent}
-.fb.active.partial{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
-.fb.active.canada{background:var(--color-background-warning);color:var(--color-text-warning);border-color:transparent}
-.fb.active.miss{background:var(--color-background-secondary);color:var(--color-text-secondary);border-color:transparent}
-.games-area{flex:1;padding:10px 16px 80px}
-.day-block{margin-bottom:8px;background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden}
-.day-header{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;user-select:none}
-.day-text{font-size:11px;font-weight:500;color:var(--color-text-secondary);letter-spacing:0.05em;text-transform:uppercase;flex:1}
-.wk-badge{font-size:10px;background:var(--color-background-success);color:var(--color-text-success);padding:2px 8px;border-radius:99px;font-weight:500}
-.day-count{font-size:11px;color:var(--color-text-tertiary)}
-.day-chevron{font-size:16px;color:var(--color-text-tertiary);transition:transform 0.2s}
-.day-block.open .day-chevron{transform:rotate(180deg)}
-.day-body{display:none;border-top:0.5px solid var(--color-border-tertiary)}
-.day-block.open .day-body{display:block}
-.game-card{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:0.5px solid var(--color-border-tertiary)}
-.game-card:last-child{border-bottom:none}
-.game-card.miss{opacity:0.45}
-.si{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
-.si-watch{background:var(--color-background-success);color:var(--color-text-success)}
-.si-partial{background:var(--color-background-info);color:var(--color-text-info)}
-.si-canada{background:var(--color-background-warning);color:var(--color-text-warning)}
-.si-miss{background:var(--color-background-secondary);color:var(--color-text-tertiary)}
-.g-info{flex:1;min-width:0}
-.g-match{font-size:13px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.g-note{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
-.g-time{font-size:12px;color:var(--color-text-tertiary);white-space:nowrap}
-.empty{text-align:center;color:var(--color-text-tertiary);font-size:13px;padding:3rem 0}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dim: #1a3a1a;
+    --green-mid: #2d5a20;
+    --green-bright: #5aaa40;
+    --green-pale: #3d7a2a;
+    --blue-dim: #0d1f35;
+    --blue-bright: #4a90d9;
+    --amber-dim: #2a1f08;
+    --amber-bright: #c98a20;
+    --surface: #141414;
+    --surface2: #161616;
+    --border: #1f1f1f;
+    --border2: #222222;
+    --text-primary: #d0d0d0;
+    --text-secondary: #666;
+    --text-muted: #444;
+    --bg: #0f0f0f;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Hero */
+  .hero {
+    background: #111;
+    padding: env(safe-area-inset-top, 52px) 20px 20px;
+    padding-top: max(52px, env(safe-area-inset-top));
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: var(--green-dim);
+    opacity: 0.5;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 20px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: #0d2b0d;
+    opacity: 0.7;
+  }
+  .hero-inner { position: relative; z-index: 1; }
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 500;
+    color: var(--green-bright);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .hero-title { font-size: 26px; font-weight: 600; color: #f0f0f0; line-height: 1.15; }
+  .hero-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .bell-btn {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: #1c1c1c; border: 0.5px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-secondary); font-size: 17px; cursor: pointer;
+  }
+
+  .countdown {
+    background: #161f16;
+    border: 0.5px solid var(--green-dim);
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cd-block { text-align: center; flex: 1; }
+  .cd-label { font-size: 10px; color: var(--green-pale); letter-spacing: 0.04em; text-transform: uppercase; }
+  .cd-val { font-size: 20px; font-weight: 600; color: #f0f0f0; margin-top: 2px; }
+  .cd-sub { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+  .cd-divider { width: 0.5px; height: 36px; background: var(--border2); flex-shrink: 0; }
+
+  /* Stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 16px 16px 0;
+  }
+  .stat-card {
+    border-radius: 14px; padding: 13px 14px;
+    border: 0.5px solid var(--border);
+    background: var(--surface2);
+  }
+  .stat-card.green { border-color: var(--green-dim); }
+  .stat-card.blue  { border-color: var(--blue-dim); }
+  .stat-card.amber { border-color: var(--amber-dim); }
+  .sc-icon { font-size: 15px; margin-bottom: 7px; }
+  .green .sc-icon { color: var(--green-mid); }
+  .blue  .sc-icon { color: #1a4a80; }
+  .amber .sc-icon { color: #7a4a10; }
+  .gray  .sc-icon { color: #2a2a2a; }
+  .sc-num { font-size: 26px; font-weight: 600; line-height: 1; }
+  .green .sc-num { color: var(--green-bright); }
+  .blue  .sc-num { color: var(--blue-bright); }
+  .amber .sc-num { color: var(--amber-bright); }
+  .gray  .sc-num { color: #555; }
+  .sc-lbl { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* Tabs */
+  .section-head { padding: 18px 16px 10px; }
+  .section-title { font-size: 11px; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.07em; text-transform: uppercase; }
+
+  .scroll-row {
+    display: flex; gap: 6px;
+    padding: 0 16px 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .scroll-row::-webkit-scrollbar { display: none; }
+
+  .stab {
+    font-size: 12px; font-weight: 500;
+    padding: 7px 14px; border-radius: 99px;
+    border: 0.5px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text-secondary);
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .stab.active { background: var(--green-dim); color: var(--green-bright); border-color: var(--green-mid); }
+
+  .fb {
+    font-size: 11px; font-weight: 500;
+    padding: 6px 12px; border-radius: 99px;
+    border: 0.5px solid var(--border2);
+    background: #0f0f0f; color: var(--text-secondary);
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .fb.active.all, .fb.active.miss { background: #222; color: #aaa; border-color: transparent; }
+  .fb.active.watch   { background: var(--green-dim); color: var(--green-bright); border-color: transparent; }
+  .fb.active.partial { background: var(--blue-dim);  color: var(--blue-bright);  border-color: transparent; }
+  .fb.active.canada  { background: var(--amber-dim); color: var(--amber-bright); border-color: transparent; }
+
+  /* Games */
+  .games-list { padding: 0 16px 100px; flex: 1; }
+
+  .day-row { display: flex; align-items: center; gap: 8px; padding: 14px 0 8px; }
+  .day-text { font-size: 11px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+  .wk-badge { font-size: 10px; font-weight: 500; background: var(--green-dim); color: var(--green-pale); padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+  .day-line { flex: 1; height: 0.5px; background: #1a1a1a; }
+
+  .game-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 11px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .game-card:active { opacity: 0.7; }
+  .game-card.watch   { border-color: var(--green-dim); }
+  .game-card.partial { border-color: var(--blue-dim); }
+  .game-card.canada  { border-color: var(--amber-dim); }
+  .game-card.miss    { opacity: 0.38; }
+
+  .status-icon {
+    width: 34px; height: 34px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 15px;
+  }
+  .si-watch   { background: var(--green-dim); color: var(--green-bright); }
+  .si-partial { background: var(--blue-dim);  color: var(--blue-bright); }
+  .si-canada  { background: var(--amber-dim); color: var(--amber-bright); }
+  .si-miss    { background: #161616; color: #2a2a2a; }
+
+  .game-info { flex: 1; min-width: 0; }
+  .game-match { font-size: 13px; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .game-note  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .game-time  { font-size: 12px; color: var(--text-secondary); white-space: nowrap; flex-shrink: 0; }
+
+  .empty { text-align: center; color: var(--text-muted); font-size: 13px; padding: 3rem 0; }
+
+  /* Nav */
+  .navbar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    display: flex; justify-content: space-around;
+    padding: 10px 0;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    background: #0f0f0f;
+    border-top: 0.5px solid #1a1a1a;
+    z-index: 100;
+  }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: #333; cursor: pointer; min-width: 60px; -webkit-tap-highlight-color: transparent; }
+  .nav-item.active { color: var(--green-bright); }
+  .nav-item i { font-size: 22px; }
+  .nav-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--green-bright); margin-top: 1px; }
 </style>
-
-<h2 class="sr-only">FIFA World Cup 2026 personal schedule for Lacombe, Alberta — Mountain Time</h2>
+</head>
+<body>
 <div class="app">
+
   <div class="hero">
-    <div class="hero-label">FIFA World Cup 2026</div>
-    <div class="hero-title">My schedule</div>
-    <div class="hero-sub">Lacombe, AB — Mountain Time</div>
-    <div class="cd-row">
-      <div class="cd-card"><div class="cd-label">Days left</div><div class="cd-val" id="ddays">--</div><div class="cd-sub">to kick off</div></div>
-      <div class="cd-card"><div class="cd-label">Tournament</div><div class="cd-val">39</div><div class="cd-sub">days total</div></div>
-      <div class="cd-card"><div class="cd-label">Matches</div><div class="cd-val">104</div><div class="cd-sub">total games</div></div>
+    <div class="hero-inner">
+      <div class="hero-top">
+        <div>
+          <div class="hero-eyebrow">FIFA World Cup 2026</div>
+          <div class="hero-title">My schedule</div>
+          <div class="hero-sub">Lacombe, AB &mdash; Mountain Time</div>
+        </div>
+        <div class="bell-btn"><i class="ti ti-bell"></i></div>
+      </div>
+      <div class="countdown">
+        <div class="cd-block">
+          <div class="cd-label">Days left</div>
+          <div class="cd-val" id="ddays">--</div>
+          <div class="cd-sub">to kick off</div>
+        </div>
+        <div class="cd-divider"></div>
+        <div class="cd-block">
+          <div class="cd-label">Tournament</div>
+          <div class="cd-val">39</div>
+          <div class="cd-sub">days total</div>
+        </div>
+        <div class="cd-divider"></div>
+        <div class="cd-block">
+          <div class="cd-label">Total games</div>
+          <div class="cd-val">104</div>
+          <div class="cd-sub">matches</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="stats-row">
-    <div class="stat-card stat-watch"><div class="stat-icon"><i class="ti ti-eye" aria-hidden="true"></i></div><div class="stat-num" id="s-watch">0</div><div class="stat-lbl">Watch</div></div>
-    <div class="stat-card stat-partial"><div class="stat-icon"><i class="ti ti-clock" aria-hidden="true"></i></div><div class="stat-num" id="s-partial">0</div><div class="stat-lbl">2nd half</div></div>
-    <div class="stat-card stat-canada"><div class="stat-icon"><i class="ti ti-map-pin" aria-hidden="true"></i></div><div class="stat-num" id="s-canada">3</div><div class="stat-lbl">Canada</div></div>
-    <div class="stat-card stat-miss"><div class="stat-icon"><i class="ti ti-briefcase" aria-hidden="true"></i></div><div class="stat-num" id="s-miss">0</div><div class="stat-lbl">Work hrs</div></div>
-  </div>
-
-  <div class="tabs-wrap">
-    <div class="tab-row" id="stage-tabs">
-      <button class="stab active" data-stage="all">All</button>
-      <button class="stab" data-stage="group">Group</button>
-      <button class="stab" data-stage="r32">Round of 32</button>
-      <button class="stab" data-stage="r16">Round of 16</button>
-      <button class="stab" data-stage="qf">Quarters</button>
-      <button class="stab" data-stage="sf">Semis</button>
-      <button class="stab" data-stage="final">Final</button>
+  <div class="stats-grid">
+    <div class="stat-card green">
+      <div class="sc-icon"><i class="ti ti-eye"></i></div>
+      <div class="sc-num" id="s-watch">0</div>
+      <div class="sc-lbl">Can watch</div>
     </div>
-    <div class="filter-row" id="filters">
-      <button class="fb active all" data-filter="all">All games</button>
-      <button class="fb watch" data-filter="watch">Watch</button>
-      <button class="fb partial" data-filter="partial">2nd half</button>
-      <button class="fb canada" data-filter="canada">Canada</button>
-      <button class="fb miss" data-filter="miss">Work hours</button>
+    <div class="stat-card blue">
+      <div class="sc-icon"><i class="ti ti-clock"></i></div>
+      <div class="sc-num" id="s-partial">0</div>
+      <div class="sc-lbl">Catch 2nd half</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="sc-icon"><i class="ti ti-map-pin"></i></div>
+      <div class="sc-num">3</div>
+      <div class="sc-lbl">Canada games</div>
+    </div>
+    <div class="stat-card gray">
+      <div class="sc-icon"><i class="ti ti-briefcase"></i></div>
+      <div class="sc-num" id="s-miss">0</div>
+      <div class="sc-lbl">During work</div>
     </div>
   </div>
 
-  <div class="games-area" id="games-list"></div>
+  <div class="section-head"><div class="section-title">Stage</div></div>
+  <div class="scroll-row" id="stage-tabs">
+    <button class="stab active" data-stage="all">All</button>
+    <button class="stab" data-stage="group">Group stage</button>
+    <button class="stab" data-stage="r32">Round of 32</button>
+    <button class="stab" data-stage="r16">Round of 16</button>
+    <button class="stab" data-stage="qf">Quarters</button>
+    <button class="stab" data-stage="sf">Semis</button>
+    <button class="stab" data-stage="final">Final</button>
+  </div>
+
+  <div class="scroll-row" id="filters">
+    <button class="fb active all" data-filter="all">All games</button>
+    <button class="fb watch" data-filter="watch">Watch</button>
+    <button class="fb partial" data-filter="partial">2nd half</button>
+    <button class="fb canada" data-filter="canada">Canada</button>
+    <button class="fb miss" data-filter="miss">Work hours</button>
+  </div>
+
+  <div class="games-list" id="games-list"></div>
+
+  <div class="navbar">
+    <div class="nav-item active">
+      <i class="ti ti-calendar"></i>
+      <span>Schedule</span>
+      <div class="nav-dot"></div>
+    </div>
+    <div class="nav-item">
+      <i class="ti ti-trophy"></i>
+      <span>Groups</span>
+    </div>
+    <div class="nav-item">
+      <i class="ti ti-device-tv"></i>
+      <span>Watch on</span>
+    </div>
+    <div class="nav-item">
+      <i class="ti ti-user"></i>
+      <span>Profile</span>
+    </div>
+  </div>
+
 </div>
-
 <script>
 const games=[
   {stage:"group",day:"Thu Jun 11",weekend:false,status:"miss",time:"1:00pm",match:"Mexico vs South Africa"},
@@ -210,55 +435,34 @@ const games=[
 ];
 
 const iconMap={watch:"ti-eye",partial:"ti-clock",canada:"ti-map-pin",miss:"ti-briefcase"};
-const siClass={watch:"si-watch",partial:"si-partial",canada:"si-canada",miss:"si-miss"};
+const siMap={watch:"si-watch",partial:"si-partial",canada:"si-canada",miss:"si-miss"};
 let aF="all",aS="all";
 
 function daysUntil(){
-  const diff=Math.ceil((new Date("2026-06-11")-new Date())/(864e5));
+  const diff=Math.ceil((new Date("2026-06-11T15:00:00-06:00")-new Date())/(864e5));
   document.getElementById("ddays").textContent=diff>0?diff:"Live!";
 }
 
 function render(){
+  const filtered=games.filter(g=>(aS==="all"||g.stage===aS)&&(aF==="all"||g.status===aF));
   const scope=games.filter(g=>aS==="all"||g.stage===aS);
-  const filtered=scope.filter(g=>aF==="all"||g.status===aF);
   document.getElementById("s-watch").textContent=scope.filter(g=>g.status==="watch").length;
   document.getElementById("s-partial").textContent=scope.filter(g=>g.status==="partial").length;
   document.getElementById("s-miss").textContent=scope.filter(g=>g.status==="miss").length;
-
   const days=[...new Set(filtered.map(g=>g.day))];
-  const container=document.getElementById("games-list");
-  if(!filtered.length){container.innerHTML='<div class="empty">No games match.</div>';return;}
-
-  const weekendDays=days.filter(d=>filtered.find(g=>g.day===d&&g.weekend));
-  const defaultOpen=weekendDays.length?weekendDays:[days[0]];
-
-  container.innerHTML=days.map(day=>{
-    const dg=filtered.filter(g=>g.day===day);
-    const isW=dg[0].weekend;
-    const open=defaultOpen.includes(day);
-    return`<div class="day-block${open?' open':''}" data-day="${day}">
-      <div class="day-header">
-        <span class="day-text">${day}</span>
-        ${isW?'<span class="wk-badge">Weekend</span>':''}
-        <span class="day-count">${dg.length} game${dg.length>1?'s':''}</span>
-        <i class="ti ti-chevron-down day-chevron" aria-hidden="true"></i>
-      </div>
-      <div class="day-body">${dg.map(g=>`
-        <div class="game-card ${g.status}">
-          <div class="si ${siClass[g.status]}"><i class="ti ${iconMap[g.status]}" aria-hidden="true"></i></div>
-          <div class="g-info">
-            <div class="g-match">${g.match}</div>
-            ${g.note?`<div class="g-note">${g.note}</div>`:''}
-          </div>
-          <div class="g-time">${g.time}</div>
-        </div>`).join('')}
-      </div>
-    </div>`;
-  }).join('');
-
-  container.querySelectorAll(".day-header").forEach(h=>{
-    h.addEventListener("click",()=>h.closest(".day-block").classList.toggle("open"));
-  });
+  let html="";
+  if(!filtered.length){html='<div class="empty">No games match this filter.</div>';}
+  else{
+    days.forEach(day=>{
+      const dg=filtered.filter(g=>g.day===day);
+      const isW=dg[0].weekend;
+      html+=`<div class="day-row"><span class="day-text">${day}</span>${isW?'<span class="wk-badge">Weekend</span>':''}<div class="day-line"></div></div>`;
+      dg.forEach(g=>{
+        html+=`<div class="game-card ${g.status}"><div class="status-icon ${siMap[g.status]}"><i class="ti ${iconMap[g.status]}"></i></div><div class="game-info"><div class="game-match">${g.match}</div>${g.note?`<div class="game-note">${g.note}</div>`:''}</div><div class="game-time">${g.time}</div></div>`;
+      });
+    });
+  }
+  document.getElementById("games-list").innerHTML=html;
 }
 
 document.getElementById("stage-tabs").addEventListener("click",e=>{
@@ -276,3 +480,5 @@ document.getElementById("filters").addEventListener("click",e=>{
 
 daysUntil();render();
 </script>
+</body>
+</html>
